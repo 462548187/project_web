@@ -23,7 +23,7 @@ utils = APIRouter(tags=["其他"])
 
 @utils.get("/help", name="获取说明文档")
 async def help_doc():
-    return core.Success(data=await read_file('apiAutoTestWeb使用说明.md'))
+    return core.Success(data=await read_file('使用说明.md'))
 
 
 @utils.get("/code", name="获取扩展脚本")
