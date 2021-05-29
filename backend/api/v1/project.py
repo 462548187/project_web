@@ -1,9 +1,14 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-project: apiAutoTestWeb
-file: project.py
-author: zy7y
-date: 2021/4/18
-desc: 项目路由
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  project.py
+@Description    :
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
 from fastapi import APIRouter
 from tortoise.transactions import in_transaction

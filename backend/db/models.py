@@ -1,8 +1,14 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-project: apiAutoTestWeb
-file: models.py
-author: zy7y
-date: 2021/4/17
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  model.py
+@Description    :
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
 from typing import List
 
@@ -35,6 +41,8 @@ class User(AbstractModel):
 class Project(AbstractModel):
     name = fields.CharField(max_length=255, description="项目名称", unique=True)
     desc = fields.TextField(description="项目描述", null=True)
+    front_serve = fields.TextField(description="前端服务", null=True)
+    back_serve = fields.TextField(description="后端服务", null=True)
 
     # 查询集最大递归层级
     class PydanticMeta:
