@@ -49,6 +49,19 @@ class Project(AbstractModel):
         max_recursion = 1
 
 
+class Todo(AbstractModel):
+    base_url = fields.CharField(255, description="基准地址", unique=True)
+    desc = fields.TextField(description="描述信息", null=True)
+    base_header = fields.TextField(
+        description="基准请求头", null=True, default='{}')
+    # allow_none 生成的pydantic模型可以不传递该参数, default 可以设置数据库表中的默认值，pydantic的默认值
+    db_settings = fields.JSONField(null=True, default=None, description="数据库配置")
+    project = fields.ForeignKeyField('models.Project', related_name='todos')
+
+    class PydanticMeta:
+        max_recursion = 2
+
+
 class Env(AbstractModel):
     base_url = fields.CharField(255, description="基准地址", unique=True)
     desc = fields.TextField(description="描述信息", null=True)
@@ -151,11 +164,15 @@ User_Pydantic = pydantic_model_creator(User, name="User", exclude=["password"])
 
 # 输入模型 exclude_readonly 只读字段 非必填
 UserIn_Pydantic = pydantic_model_creator(User, name="UserIn", exclude=[
-                                         "avatar"], exclude_readonly=True)
+    "avatar"], exclude_readonly=True)
 
 Project_Pydantic = pydantic_model_creator(Project, name="Project")
 ProjectIn_Pydantic = pydantic_model_creator(
     Project, name="ProjectIn", exclude_readonly=True)
+
+Todo_Pydantic = pydantic_model_creator(Todo, name="Todo")
+TodoIn_Pydantic = pydantic_model_creator(
+    Env, name="TodoIn", exclude_readonly=True)
 
 Env_Pydantic = pydantic_model_creator(Env, name="Env")
 EnvIn_Pydantic = pydantic_model_creator(

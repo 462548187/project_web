@@ -1,11 +1,14 @@
-#!/usr/bin/env/ python3
-# -*- coding:utf-8 -*-
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-@task: apiAutoTestFastAPI
-@File  :task.py
-@Author:zy7y
-@Date  :2021/4/24 16:41
-@Desc  :
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  task.py
+@Description    :
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
 import time
 
