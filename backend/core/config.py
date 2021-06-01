@@ -1,46 +1,40 @@
-# !/usr/bin/python3
-# -*- coding: utf-8 -*-
 """
-@Author         :  Liu Yue
-@Version        :  
-------------------------------------
-@File           :  config.py
-@Description    :  
-@CreateTime     :  2021/5/31 9:53 下午
-------------------------------------
-@ModifyTime     :  
+project: apiAutoTestWeb
+file: config.py
+author: zy7y
+date: 2021/4/17
 """
-from pydantic import AnyHttpUrl
+import secrets
 from typing import List
-from loguru import logger
-import time
-import os
+
+from pydantic import BaseSettings
 
 
-class Settings:
-    ENV = os.environ.get("fast_env", "DEV")  # 本次启动环境
-    APP_NAME = "fastapi-vue-admin"
-    # api前缀
-    API_PREFIX = "/api"
-    # jwt密钥,建议随机生成一个
-    SECRET_KEY = "ShsUP9qIP2Xui2GpXRY6y74v2JSVS0Q2YOXJ22VjwkI"
-    # token过期时间
-    ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60
-    # 跨域白名单
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:8000"]
-    # db配置
-    DB_URL = "mysql+pymysql://root:12345678@127.0.0.1:3306/fastapi-vue-admin"
-    # 启动端口配置
-    PORT = 8999
-    # 是否热加载
-    RELOAD = True
-    # 日志收集器
-    LOG_FOLDER = "./fastapi-logs"
-    if not os.path.exists(LOG_FOLDER):
-        os.mkdir(LOG_FOLDER)
-    t = time.strftime("%Y_%m_%d")
-    logger = logger
-    logger.add(f"{LOG_FOLDER}/fastapi_log_{t}.log", rotation="00:00", encoding="utf-8", retention="30 days")
+class Settings(BaseSettings):
+    """配置类"""
+
+    # token相关
+    ALGORITHM: str = "HS256"  # 加密算法
+    SECRET_KEY: str = secrets.token_urlsafe(32)  # 随机生成的base64位字符串
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 3  # token的时效 3 天 = 60 * 24 * 3
+
+    # 跨域设置
+    ORIGINS: List[str] = ["*"]
+
+    # 接口文档设置
+    DESC: str = """
+`apiAutoTest接口自动化测试工具的可视化版本，将原本对用例的操作转移到Web页面之上`
+- 前端：`Vue2`  `ElementUI`   `Vue element admin template`
+- 后端: `Python` ` FastAPI ` `Tortoise ORM`  `Sqlite3`
+
+**资料汇总**
+- [x] [Gitee源码](https://gitee.com/zy7y/apiAutoTestWeb)
+- [x] [Github源码](https://github.com/zy7y/apiAutoTestWeb)
+- [x] [前端源码](https://gitee.com/zy7y/apiAutoTestVue/tree/element-ui/)
+- [x] [后端源码](https://gitee.com/zy7y/apiAutoTestFastApi/tree/develop/)
+- [x] [B站了解项目进度](https://space.bilibili.com/438858333/channel/detail?cid=179917)
+
+    """
 
 
-settings = Settings()
+setting = Settings()

@@ -10,7 +10,7 @@
     >
       <div class="title-container">
         <div class="logo">
-          <img src="../../assets/logo.png" alt />
+          <img src="../../assets/logo.png" alt="" />
         </div>
       </div>
 
@@ -45,7 +45,9 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
 
@@ -54,7 +56,8 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-      >登录</el-button>
+        >登录</el-button
+      >
     </el-form>
   </div>
 </template>
@@ -64,7 +67,7 @@ import { validUsername } from "@/utils/validate";
 
 export default {
   name: "Login",
-  data () {
+  data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
         callback(new Error("请输入有效的用户名"));
@@ -81,8 +84,8 @@ export default {
     };
     return {
       loginForm: {
-        username: "",
-        password: "",
+        username: "tester",
+        password: "123456",
       },
       loginRules: {
         username: [
@@ -106,7 +109,7 @@ export default {
     },
   },
   methods: {
-    showPwd () {
+    showPwd() {
       if (this.passwordType === "password") {
         this.passwordType = "";
       } else {
@@ -116,7 +119,7 @@ export default {
         this.$refs.password.focus();
       });
     },
-    handleLogin () {
+    handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;

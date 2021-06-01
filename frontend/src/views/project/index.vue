@@ -7,7 +7,9 @@
         type="primary"
         icon="el-icon-edit"
         @click="handleCreate"
-      >新增</el-button>
+      >
+        新增
+      </el-button>
     </div>
 
     <el-table
@@ -20,23 +22,12 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column label="序号" type="index" align="center" width="80"></el-table-column>
+      <el-table-column label="序号" type="index" align="center" width="80">
+      </el-table-column>
 
       <el-table-column label="名称">
         <template slot-scope="{ row }">
           <span>{{ row.name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="前端服务" min-width="150px">
-        <template slot-scope="{ row }">
-          <span>{{ row.front_serve }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="后端服务" min-width="150px">
-        <template slot-scope="{ row }">
-          <span>{{ row.back_serve }}</span>
         </template>
       </el-table-column>
 
@@ -63,13 +54,17 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+            编辑
+          </el-button>
           <el-button
             v-if="row.status != 'deleted'"
             size="mini"
             type="danger"
             @click="DeleteData(row)"
-          >删除</el-button>
+          >
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,40 +91,23 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
-
-        <el-form-item label="前端服务">
-          <el-input
-            v-model="temp.front_serve"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            type="textarea"
-            placeholder="Please input"
-          />
-        </el-form-item>
-
-        <el-form-item label="后端服务">
-          <el-input
-            v-model="temp.back_serve"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            type="textarea"
-            placeholder="Please input"
-          />
-        </el-form-item>
-
         <el-form-item label="描述">
           <el-input
             v-model="temp.desc"
-            :autosize="{ minRows: 4, maxRows: 8 }"
+            :autosize="{ minRows: 2, maxRows: 4 }"
             type="textarea"
             placeholder="Please input"
           />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button @click="dialogFormVisible = false"> 取消 </el-button>
         <el-button
           type="primary"
           @click="dialogStatus === 'create' ? createData() : updateData()"
-        >提交</el-button>
+        >
+          提交
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -149,7 +127,7 @@ export default {
   name: "ComplexTable",
   components: { Pagination },
   directives: { waves },
-  data () {
+  data() {
     return {
       tableKey: 0,
       list: null,
@@ -168,8 +146,6 @@ export default {
       // 弹出框表单
       temp: {
         name: "",
-        front_serve: "",
-        back_serve: "",
         desc: "",
       },
       dialogFormVisible: false,
@@ -184,11 +160,11 @@ export default {
       downloadLoading: false,
     };
   },
-  created () {
+  created() {
     this.getList();
   },
   methods: {
-    getList () {
+    getList() {
       this.listLoading = true;
       fetchList(this.listQuery).then((response) => {
         this.list = response.data.items;
@@ -200,15 +176,13 @@ export default {
         }, 1.5 * 1000);
       });
     },
-    resetTemp () {
+    resetTemp() {
       this.temp = {
         name: "",
-        front_serve: "",
-        back_serve: "",
         desc: "",
       };
     },
-    handleCreate () {
+    handleCreate() {
       this.resetTemp();
       this.dialogStatus = "create";
       this.dialogFormVisible = true;
@@ -216,7 +190,7 @@ export default {
         this.$refs["dataForm"].clearValidate();
       });
     },
-    createData () {
+    createData() {
       this.$refs["dataForm"].validate((valid) => {
         if (valid) {
           createProject(this.temp).then((res) => {
@@ -232,7 +206,7 @@ export default {
         }
       });
     },
-    handleUpdate (row) {
+    handleUpdate(row) {
       this.temp = Object.assign({}, row); // copy obj
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
@@ -240,7 +214,7 @@ export default {
         this.$refs["dataForm"].clearValidate();
       });
     },
-    updateData () {
+    updateData() {
       this.$refs["dataForm"].validate((valid) => {
         if (valid) {
           updateProject(this.temp).then(() => {
@@ -256,7 +230,7 @@ export default {
         }
       });
     },
-    DeleteData (row) {
+    DeleteData(row) {
       deleteProject(row.id).then((res) => {
         this.$notify({
           title: "Success",
