@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     # 跨域设置
     ORIGINS: List[str] = ["*"]
 
+    # 启动端口配置
+    PORT = 8999
+    # 是否热加载
+    RELOAD = True
+
     # 接口文档设置
     DESC: str = """
 `apiAutoTest接口自动化测试工具的可视化版本，将原本对用例的操作转移到Web页面之上`
