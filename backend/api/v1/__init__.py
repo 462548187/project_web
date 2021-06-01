@@ -10,7 +10,7 @@ from .task import tasks
 from .user import users
 from .project import projects
 from .util import utils
-from .todo import todos
+from .story import stories
 
 # v1 = APIRouter(prefix="/v1", dependencies=[Depends(core.get_current_user)])
 
@@ -18,7 +18,7 @@ from .todo import todos
 v1 = APIRouter(prefix="/v1")
 v1.include_router(users)
 v1.include_router(projects)
-v1.include_router(todos)
+v1.include_router(stories)
 v1.include_router(envs)
 v1.include_router(interfaces)
 v1.include_router(cases)
