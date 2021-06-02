@@ -11,7 +11,6 @@
 @ModifyTime     :
 """
 
-
 from fastapi import APIRouter
 
 import core
@@ -51,6 +50,15 @@ async def select_all(limit: int = 10, page: int = 1):
     # from_queryset 针对queryset 对象序列化
     data = await models.Story_Pydantic.from_queryset(models.Story.all().order_by('-created_at').offset(skip).limit(limit))
     return core.Success(data={"total": await models.Story.all().count(), "items": data})
+
+
+@stories.get("/search/{e_name}", name="查询需求")
+async def select_name(e_name: str):
+    try:
+        data = await models.Story_Pydantic.from_queryset_single(models.Story.get(name=e_name))
+        return core.Success(data=data)
+    except Exception as e:
+        return core.Fail(message=f"查看失败.{e}")
 
 
 @stories.get("/story/{e_id}", name="需求详情")
