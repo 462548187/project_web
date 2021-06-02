@@ -38,8 +38,8 @@ async def create(story: models.StoryIn_Pydantic):
 
 @stories.delete("/story/{e_id}", name="需求删除")
 async def delete(e_id: int):
-    todo_obj = await models.Story.filter(id=e_id).delete()
-    if todo_obj:
+    story_obj = await models.Story.filter(id=e_id).delete()
+    if story_obj:
         return core.Success()
     return core.Fail(message="需求不存在.")
 

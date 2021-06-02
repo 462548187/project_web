@@ -65,6 +65,17 @@ class Story(AbstractModel):
         max_recursion = 2
 
 
+class Push(AbstractModel):
+    project = fields.ForeignKeyField('models.Project', related_name='pushes', description="所属业务")
+    name = fields.CharField(max_length=255, description="事件名称", unique=True)
+    receive = fields.CharField(max_length=255, description="接收方式", null=True)
+    web_hook = fields.CharField(255, description="webhook", unique=True)
+    template = fields.CharField(max_length=255, description="模板", null=True)
+
+    class PydanticMeta:
+        max_recursion = 2
+
+
 class Env(AbstractModel):
     base_url = fields.CharField(255, description="基准地址", unique=True)
     desc = fields.TextField(description="描述信息", null=True)
@@ -175,6 +186,10 @@ ProjectIn_Pydantic = pydantic_model_creator(
 Story_Pydantic = pydantic_model_creator(Story, name="Story")
 StoryIn_Pydantic = pydantic_model_creator(
     Story, name="StoryIn", exclude_readonly=True)
+
+Push_Pydantic = pydantic_model_creator(Push, name="Push")
+PushIn_Pydantic = pydantic_model_creator(
+    Push, name="PushIn", exclude_readonly=True)
 
 Env_Pydantic = pydantic_model_creator(Env, name="Env")
 EnvIn_Pydantic = pydantic_model_creator(
