@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     PORT = 8999
     # 是否热加载
     RELOAD = True
+    DEBUG = True
 
     # 接口文档设置
     DESC: str = """
