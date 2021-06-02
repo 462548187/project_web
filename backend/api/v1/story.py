@@ -52,10 +52,11 @@ async def select_all(limit: int = 10, page: int = 1):
     return core.Success(data={"total": await models.Story.all().count(), "items": data})
 
 
-@stories.get("/search/{e_name}", name="查询需求")
-async def select_name(e_name: str):
+@stories.get("/search/{story_name}", name="模糊查询需求名称")
+async def select_story(story_name: str, limit: int = 10, page: int = 1):
+    skip = (page - 1) * limit
     try:
-        data = await models.Story_Pydantic.from_queryset_single(models.Story.get(name=e_name))
+        data = await models.Story_Pydantic.from_queryset(models.Story.filter(name__contains=story_name).all().order_by('-created_at').offset(skip).limit(limit))
         return core.Success(data=data)
     except Exception as e:
         return core.Fail(message=f"查看失败.{e}")
