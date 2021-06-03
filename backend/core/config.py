@@ -28,17 +28,14 @@ class Settings(BaseSettings):
     DEBUG = True
 
     # 接口文档设置
+    TITLE: str = 'ProjectWeb'
     DESC: str = """
-`apiAutoTest接口自动化测试工具的可视化版本，将原本对用例的操作转移到Web页面之上`
+`接口自动化测试工具的可视化版本，将原本对用例的操作转移到Web页面之上`
 - 前端：`Vue2`  `ElementUI`   `Vue element admin template`
-- 后端: `Python` ` FastAPI ` `Tortoise ORM`  `Sqlite3`
+- 后端: `Python` ` FastAPI ` `Tortoise ORM`  `MySQL`
 
 **资料汇总**
 - [x] [Gitee源码](https://gitee.com/zy7y/apiAutoTestWeb)
-- [x] [Github源码](https://github.com/zy7y/apiAutoTestWeb)
-- [x] [前端源码](https://gitee.com/zy7y/apiAutoTestVue/tree/element-ui/)
-- [x] [后端源码](https://gitee.com/zy7y/apiAutoTestFastApi/tree/develop/)
-- [x] [B站了解项目进度](https://space.bilibili.com/438858333/channel/detail?cid=179917)
 
     """
 

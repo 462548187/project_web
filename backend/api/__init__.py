@@ -21,7 +21,7 @@ from .v1 import v1
 
 
 def create_app():
-    app = FastAPI(title="apiAutoTestWeb", description=core.setting.DESC)
+    app = FastAPI(title=core.setting.TITLE, description=core.setting.DESC)
 
     # 启动事件
     @app.on_event("startup")
