@@ -39,7 +39,8 @@ def create_app():
     # 挂载 数据库
     register_tortoise(
         app,
-        db_url="sqlite://db.sqlite3",
+        # db_url="sqlite://db.sqlite3",
+        db_url=f"mysql://root:123456@127.0.0.1:3306/project_web",
         modules={"models": ["db.models"]},
         # # 生成表
         generate_schemas=True,
