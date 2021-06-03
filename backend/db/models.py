@@ -71,6 +71,7 @@ class Push(AbstractModel):
     receive = fields.CharField(max_length=255, description="接收方式", null=True)
     web_hook = fields.CharField(255, description="webhook", unique=True)
     template = fields.CharField(max_length=255, description="模板", null=True)
+    is_active = fields.BooleanField(max_length=255, description="是否激活", null=True)
 
     class PydanticMeta:
         max_recursion = 2
