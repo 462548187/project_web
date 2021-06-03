@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     # 接口文档设置
     TITLE: str = 'ProjectWeb'
     DESC: str = """
-`接口自动化测试工具的可视化版本，将原本对用例的操作转移到Web页面之上`
+`测试部门日常项目信息同步工具`
 - 前端：`Vue2`  `ElementUI`   `Vue element admin template`
 - 后端: `Python` ` FastAPI ` `Tortoise ORM`  `MySQL`
 

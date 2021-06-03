@@ -32,8 +32,11 @@ class AbstractModel(Model):
 class User(AbstractModel):
     username = fields.CharField(max_length=255, unique=True, description="用户名")
     password = fields.CharField(max_length=255, description="用户密码")
-    avatar = fields.CharField(
-        max_length=255,
+    nickname = fields.CharField(max_length=255, description="昵称")
+    email = fields.CharField(max_length=255, description="邮箱", null=True)
+    mobile = fields.CharField(max_length=255, description="手机", null=True)
+    is_active = fields.BooleanField(max_length=255, description="是否激活", default=1)
+    avatar = fields.CharField(max_length=255,
         default="/static/default.jpg",
         description="用户头像")
 
@@ -71,7 +74,7 @@ class Push(AbstractModel):
     receive = fields.CharField(max_length=255, description="接收方式", null=True)
     web_hook = fields.CharField(255, description="webhook", unique=True)
     template = fields.CharField(max_length=255, description="模板", null=True)
-    is_active = fields.BooleanField(max_length=255, description="是否激活", null=True)
+    is_active = fields.BooleanField(max_length=255, description="是否激活", default=1)
 
     class PydanticMeta:
         max_recursion = 2

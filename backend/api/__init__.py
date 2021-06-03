@@ -42,7 +42,7 @@ def create_app():
         # db_url="sqlite://db.sqlite3",
         db_url=f"mysql://root:123456@127.0.0.1:3306/project_web",
         modules={"models": ["db.models"]},
-        # # 生成表
+        # 生成表
         generate_schemas=True,
         # 使用异常，当无数据是自动返回
         add_exception_handlers=True,
