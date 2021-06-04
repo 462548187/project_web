@@ -11,6 +11,7 @@
 @ModifyTime     :
 """
 from typing import List
+from enum import Enum
 
 from tortoise import fields, Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
@@ -37,8 +38,8 @@ class User(AbstractModel):
     mobile = fields.CharField(max_length=255, description="手机", null=True)
     is_active = fields.BooleanField(max_length=255, description="是否激活", default=1)
     avatar = fields.CharField(max_length=255,
-        default="/static/default.jpg",
-        description="用户头像")
+                              default="/static/default.jpg",
+                              description="用户头像")
 
 
 class Project(AbstractModel):
@@ -52,9 +53,16 @@ class Project(AbstractModel):
         max_recursion = 1
 
 
+class StoryType(str, Enum):
+    demand = '需求',
+    optimization = '优化',
+    bug = '缺陷',
+    others = '其他'
+
+
 class Story(AbstractModel):
     name = fields.CharField(max_length=255, description="需求名称", unique=True)
-    type = fields.CharField(max_length=255, description="类型", null=True)
+    type = fields.CharEnumField(StoryType, default=StoryType.demand)
     project = fields.ForeignKeyField('models.Project', related_name='stories', description="所属业务")
     desc = fields.TextField(description="功能描述", null=True)
     dev_name = fields.CharField(max_length=255, description="开发人", null=True)
