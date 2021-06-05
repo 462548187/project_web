@@ -1,5 +1,5 @@
-# apiAutoTestWeb
->基于apiAutoTest接口测试工具而制作的可视化版本，熟悉FastAPI、Vue的写法，为以后写测试平台铺垫，此为Demo，将陆续迭代.
+# projectWeb
+>基于projectWeb接口测试工具而制作的可视化版本，熟悉FastAPI、Vue的写法，增加测试团队管理，此为Demo，将陆续迭代.
 
 # 技术实现
 - 前端:   
@@ -12,5 +12,4 @@
   - [x] [FastAPI](https://fastapi.tiangolo.com/)
   - [x] [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/index.html)
   
-# 更新记录
-[更新记录](更新日志.md)
+  

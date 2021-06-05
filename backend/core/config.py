@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     - 后端: `Python` ` FastAPI ` `Tortoise ORM`  `MySQL`
     
     **资料汇总**
-    - [x] [Gitee源码](https://gitee.com/liuyue/apiAutoTestWeb)
+    - [x] [Github源码](https://github.com/462548187/project_web)
 
     """
 
