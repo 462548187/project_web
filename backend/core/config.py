@@ -15,7 +15,10 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     """配置类"""
-
+    ENV = os.environ.get("fast_env", "DEV")  # 本次启动环境
+    APP_NAME = "fastapi-vue-admin"
+    # api前缀
+    API_PREFIX = "/v1"
     # token相关
     ALGORITHM: str = "HS256"  # 加密算法
     # jwt密钥,建议随机生成一个
@@ -28,6 +31,7 @@ class Settings(BaseSettings):
 
     # 跨域白名单
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:8000"]
+
     # db配置
     DB_URL = "mysql://root:123456@127.0.0.1:3306/project_web"
 
@@ -35,7 +39,7 @@ class Settings(BaseSettings):
     PORT = 8999
     # 是否热加载
     RELOAD = True
-    DEBUG = True
+    DEBUG = False
 
     # 接口文档设置
     TITLE: str = 'ProjectWeb'

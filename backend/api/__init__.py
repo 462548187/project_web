@@ -20,7 +20,12 @@ from .v1 import v1
 
 
 def create_app():
-    app = FastAPI(title=settings.TITLE, description=settings.DESC)
+    # 初始化app实例
+    if settings.ENV == "PROD":
+        # 生产关闭swagger
+        app = FastAPI(title=settings.APP_NAME, docs_url=None, redoc_url=None)
+    else:
+        app = FastAPI(title=settings.TITLE,  description=settings.DESC)
 
     # 挂载静态文件
     app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -36,14 +41,17 @@ def create_app():
         add_exception_handlers=True,
     )
 
-    # 跨域中间件
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.ORIGINS,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+
+    # 设置CORS站点
+    if settings.BACKEND_CORS_ORIGINS:
+        app.add_middleware(CORSMiddleware,
+                           allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+                           # allow_origins=settings.ORIGINS,
+                           allow_credentials=True,
+                           allow_methods=["*"],
+                           allow_headers=["*"],
+                           expose_headers=["Content-Disposition"]
+                           )
 
     # 挂载子路由
     app.include_router(prefix="/v1", router=login_router)
