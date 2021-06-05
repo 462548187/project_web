@@ -3,7 +3,7 @@
 """
 @Project: apiAutoTestFastAPI
 @File  :enum_filed.py
-@Author:zy7y
+@Author:liuyue
 @Date  :2021/4/22 21:40
 @Desc  : 枚举类的字段
 """
@@ -30,3 +30,10 @@ class Standard(str, Enum):
     """接口规范"""
     RESTFUL = 'restful'
     GRAPHQL = 'graphql'
+
+
+class StoryType(str, Enum):
+    demand = '需求',
+    optimization = '优化',
+    bug = '缺陷',
+    others = '其他'

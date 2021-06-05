@@ -1,12 +1,12 @@
 """
 project: apiAutoTestWeb
 file: log.py
-author: zy7y
+author: liuyue
 date: 2021/4/17
 """
 # 数据库日志
-import logging, sys
-
+import logging
+import sys
 
 fmt = logging.Formatter(
     fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",

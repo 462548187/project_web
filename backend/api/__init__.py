@@ -1,7 +1,7 @@
 """
 project: apiAutoTestWeb
 file: __init__.py
-author: zy7y
+author: liuyue
 date: 2021/4/17
 """
 from fastapi import FastAPI
@@ -10,8 +10,8 @@ from fastapi.staticfiles import StaticFiles
 from tortoise.contrib.fastapi import register_tortoise
 
 import core
+from core import settings
 from .auth import auth
-from util import scheduler
 
 # from db import log
 
@@ -21,17 +21,7 @@ from .v1 import v1
 
 
 def create_app():
-    app = FastAPI(title=core.setting.TITLE, description=core.setting.DESC)
-
-    # 启动事件
-    @app.on_event("startup")
-    async def startup_event():
-        scheduler.init_timer()
-
-    # 结束事件
-    @app.on_event("shutdown")
-    async def shutdown_event():
-        scheduler.close_timer()
+    app = FastAPI(title=settings.TITLE, description=settings.DESC)
 
     # 挂载静态文件
     app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -40,7 +30,7 @@ def create_app():
     register_tortoise(
         app,
         # db_url="sqlite://db.sqlite3",
-        db_url=f"mysql://root:123456@127.0.0.1:3306/project_web",
+        db_url=settings.DB_URL,
         modules={"models": ["db.models"]},
         # 生成表
         generate_schemas=True,
@@ -51,7 +41,7 @@ def create_app():
     # 跨域中间件
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=core.setting.ORIGINS,
+        allow_origins=settings.ORIGINS,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

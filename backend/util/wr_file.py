@@ -1,7 +1,7 @@
 """
 project: apiAutoTestWeb
 file: wr_file.py
-author: zy7y
+author: liuyue
 date: 2021/4/18
 desc: 读/写文件方法
 """

@@ -1,7 +1,7 @@
 """
 project: apiAutoTestWeb
 file: project.py
-author: zy7y
+author: liuyue
 date: 2021/4/18
 desc: 项目路由
 """
@@ -57,14 +57,6 @@ async def select(p_id: int):
 async def update(p_id: int, project: models.ProjectIn_Pydantic):
     await models.Project.filter(id=p_id).update(**project.dict(exclude_unset=True))
     return core.Success(data=await models.Project_Pydantic.from_queryset_single(models.Project.get(id=p_id)))
-
-
-@projects.get("/project/{p_id}/cases", name="获取项目下所有用例")
-async def get_cases(p_id: int):
-    sql = f"select 'case'.id, 'case'.name, 'case'.interface_id from 'case', interface WHERE  interface.id = 'case'.interface_id AND interface.project_id ={p_id};"
-    async with in_transaction("default") as conn:
-        data = await conn.execute_query_dict(sql)
-    return core.Success(data={"total": len(data), "items": data})
 
 
 @projects.get("/projects", name="获取所有项目不分页")

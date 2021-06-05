@@ -1,7 +1,7 @@
 """
 project: apiAutoTestWeb
 file: security.py
-author: zy7y
+author: liuyue
 date: 2021/4/17
 """
 from datetime import timedelta, datetime
@@ -18,12 +18,12 @@ from passlib.context import CryptContext
 
 
 from db import models
-from .config import setting
-
+from .config import settings
+# 密码加密算法
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # 生成token 的指定路由
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/login")
 
 
 def get_password_hash(password: str) -> str:
@@ -37,20 +37,27 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    """
+    生成JWT token
+    """
     to_encode = data.copy()
+    # 设置token过期时间
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
         to_encode,
-        setting.SECRET_KEY,
-        algorithm=setting.ALGORITHM)
+        settings.SECRET_KEY,
+        algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
+    """
+    获取当前登陆用户
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -58,8 +65,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(
-            token, setting.SECRET_KEY, algorithms=[
-                setting.ALGORITHM])
+            token, settings.SECRET_KEY, algorithms=[
+                settings.ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception

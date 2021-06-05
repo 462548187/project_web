@@ -3,7 +3,7 @@
 """
 @Project: apiAutoTestFastApi
 @File  :util.py
-@Author:zy7y
+@Author:liuyue
 @Date  :2021/4/28 10:54
 @Desc  : 其他工具路由
 """
