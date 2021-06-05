@@ -62,6 +62,10 @@ async def get_plant():
     })
 
 
-@utils.post("/mysql_connection", summary="mysql连接测试")
+@utils.post("/mysql", summary="mysql连接测试")
 async def test_connection(mysql: MysqlSettings):
-    pass
+    coon = await connect(mysql.dict())
+    if isinstance(coon, str):
+        return core.Fail(message=coon)
+    coon.close()
+    return core.Success(message="连接成功.")

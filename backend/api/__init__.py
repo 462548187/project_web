@@ -30,7 +30,7 @@ def create_app():
 
     # 结束事件
     @app.on_event("shutdown")
-    def shutdown_event():
+    async def shutdown_event():
         scheduler.close_timer()
 
     # 挂载静态文件
