@@ -16,10 +16,10 @@ from fastapi import APIRouter
 import core
 from db import models
 
-stories = APIRouter(tags=["需求相关"])
+story_router = APIRouter(tags=["需求相关"])
 
 
-@stories.post("/story", name="需求新增")
+@story_router.post("/story", name="需求新增")
 async def create(story: models.StoryIn_Pydantic):
     """
     环境新增数据库配置目前只提供mysql，需按照如下字典配置
@@ -36,7 +36,7 @@ async def create(story: models.StoryIn_Pydantic):
         return core.Fail(message=f"创建失败.{e}")
 
 
-@stories.delete("/story/{e_id}", name="需求删除")
+@story_router.delete("/story/{e_id}", name="需求删除")
 async def delete(e_id: int):
     story_obj = await models.Story.filter(id=e_id).delete()
     if story_obj:
@@ -44,7 +44,7 @@ async def delete(e_id: int):
     return core.Fail(message="需求不存在.")
 
 
-@stories.get("/story", name="查询所有需求")
+@story_router.get("/story", name="查询所有需求")
 async def select_all(limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     # from_queryset 针对queryset 对象序列化
@@ -52,7 +52,7 @@ async def select_all(limit: int = 10, page: int = 1):
     return core.Success(data={"total": await models.Story.all().count(), "items": data})
 
 
-@stories.get("/search/{story_name}", name="模糊查询需求名称")
+@story_router.get("/search/{story_name}", name="模糊查询需求名称")
 async def select_story(story_name: str, limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     try:
@@ -62,7 +62,7 @@ async def select_story(story_name: str, limit: int = 10, page: int = 1):
         return core.Fail(message=f"查看失败.{e}")
 
 
-@stories.get("/story/{e_id}", name="需求详情")
+@story_router.get("/story/{e_id}", name="需求详情")
 async def select(e_id: int):
     try:
         data = await models.Story_Pydantic.from_queryset_single(models.Story.get(id=e_id))
@@ -71,7 +71,7 @@ async def select(e_id: int):
         return core.Fail(message=f"查看详情失败.{e}")
 
 
-@stories.put("/story/{e_id}", name="需求编辑")
+@story_router.put("/story/{e_id}", name="需求编辑")
 async def update(e_id: int, story: models.StoryIn_Pydantic):
     try:
         await models.Story.filter(id=e_id).update(**story.dict(exclude_unset=True))

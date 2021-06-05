@@ -9,9 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from tortoise.contrib.fastapi import register_tortoise
 
-import core
 from core import settings
-from .auth import auth
+from api.v1.login import login_router
 
 # from db import log
 
@@ -29,7 +28,6 @@ def create_app():
     # 挂载 数据库
     register_tortoise(
         app,
-        # db_url="sqlite://db.sqlite3",
         db_url=settings.DB_URL,
         modules={"models": ["db.models"]},
         # 生成表
@@ -48,7 +46,7 @@ def create_app():
     )
 
     # 挂载子路由
-    app.include_router(prefix="/v1", router=auth)
+    app.include_router(prefix="/v1", router=login_router)
     app.include_router(router=v1)
 
     return app

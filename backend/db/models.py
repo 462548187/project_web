@@ -56,7 +56,7 @@ class Project(AbstractModel):
 class Story(AbstractModel):
     name = fields.CharField(max_length=255, description="需求名称", unique=True)
     type = fields.CharEnumField(StoryType, default=StoryType.demand)
-    project = fields.ForeignKeyField('models.Project', related_name='stories', description="所属业务")
+    project = fields.ForeignKeyField('models.Project', related_name='story_router', description="所属业务")
     desc = fields.TextField(description="功能描述", null=True)
     dev_name = fields.CharField(max_length=255, description="开发人", null=True)
     test_name = fields.CharField(max_length=255, description="测试人", null=True)
@@ -70,7 +70,7 @@ class Story(AbstractModel):
 
 
 class Push(AbstractModel):
-    project = fields.ForeignKeyField('models.Project', related_name='pushes', description="所属业务")
+    project = fields.ForeignKeyField('models.Project', related_name='push_router', description="所属业务")
     name = fields.CharField(max_length=255, description="事件名称", unique=True)
     receive = fields.CharField(max_length=255, description="接收方式", null=True)
     web_hook = fields.CharField(255, description="webhook", unique=True)

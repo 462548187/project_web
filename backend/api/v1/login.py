@@ -1,6 +1,6 @@
 """
 project: apiAutoTestWeb
-file: auth.py
+file: login.py
 author: liuyue
 date: 2021/4/17
 desc: 鉴权处理
@@ -10,13 +10,12 @@ from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
 from loguru import logger
 import core
-from core import settings
 from db import models
 
-auth = APIRouter(tags=["登录相关"])
+login_router = APIRouter(tags=["登录相关"])
 
 
-@auth.post("/login", name="登录")
+@login_router.post("/login", name="登录")
 async def login(user: OAuth2PasswordRequestForm = Depends()):
     """
     获取token
@@ -43,6 +42,6 @@ async def login(user: OAuth2PasswordRequestForm = Depends()):
         return JSONResponse({"access_token": access_token, "token_type": "bearer"})
 
 
-@auth.post("/logout", name="退出")
+@login_router.post("/logout", name="退出")
 async def logout(token: str = Depends(core.get_current_user)):
     return core.Success(data=token)

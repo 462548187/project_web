@@ -16,10 +16,10 @@ from fastapi import APIRouter
 import core
 from db import models
 
-pushes = APIRouter(tags=["推送"])
+push_router = APIRouter(tags=["推送"])
 
 
-@pushes.post("/push", name="推送新增")
+@push_router.post("/push", name="推送新增")
 async def create(push: models.PushIn_Pydantic):
     """
     环境新增数据库配置目前只提供mysql，需按照如下字典配置
@@ -34,7 +34,7 @@ async def create(push: models.PushIn_Pydantic):
         return core.Fail(message=f"创建失败.{e}")
 
 
-@pushes.delete("/push/{e_id}", name="推送删除")
+@push_router.delete("/push/{e_id}", name="推送删除")
 async def delete(e_id: int):
     push_obj = await models.Push.filter(id=e_id).delete()
     if push_obj:
@@ -42,7 +42,7 @@ async def delete(e_id: int):
     return core.Fail(message="推送不存在.")
 
 
-@pushes.get("/push", name="查询所有推送")
+@push_router.get("/push", name="查询所有推送")
 async def select_all(limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     # from_queryset 针对queryset 对象序列化
@@ -50,7 +50,7 @@ async def select_all(limit: int = 10, page: int = 1):
     return core.Success(data={"total": await models.Push.all().count(), "items": data})
 
 
-@pushes.get("/search/{push_name}", name="模糊推送需求名称")
+@push_router.get("/search/{push_name}", name="模糊推送需求名称")
 async def select_push(push_name: str, limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     try:
@@ -60,7 +60,7 @@ async def select_push(push_name: str, limit: int = 10, page: int = 1):
         return core.Fail(message=f"查看失败.{e}")
 
 
-@pushes.put("/push/{e_id}", name="推送编辑")
+@push_router.put("/push/{e_id}", name="推送编辑")
 async def update(e_id: int, push: models.PushIn_Pydantic):
     try:
         await models.Push.filter(id=e_id).update(**push.dict(exclude_unset=True))

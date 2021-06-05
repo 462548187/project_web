@@ -11,10 +11,10 @@ from fastapi import APIRouter, Depends
 import core
 from db import models
 
-users = APIRouter(tags=["用户相关"])
+user_router = APIRouter(tags=["用户相关"])
 
 
-@users.get("/info", name="获取当前登录用户信息")
+@user_router.get("/info", name="获取当前登录用户信息")
 async def info(user: models.UserIn_Pydantic = Depends(core.get_current_user)):
     """
     - token
@@ -23,7 +23,7 @@ async def info(user: models.UserIn_Pydantic = Depends(core.get_current_user)):
     return core.Success(data=await models.User_Pydantic.from_tortoise_orm(user))
 
 
-@users.post("/user", name="新增用户")
+@user_router.post("/user", name="新增用户")
 async def create(user: models.UserIn_Pydantic):
     """
     - name：str
@@ -37,7 +37,7 @@ async def create(user: models.UserIn_Pydantic):
     return core.Success(data=await models.User_Pydantic.from_tortoise_orm(user_obj))
 
 
-@users.delete("/user/{e_id}", name="用户删除")
+@user_router.delete("/user/{e_id}", name="用户删除")
 async def delete(e_id: int):
     story_obj = await models.User.filter(id=e_id).delete()
     if story_obj:
@@ -45,7 +45,7 @@ async def delete(e_id: int):
     return core.Fail(message="用户不存在.")
 
 
-@users.get("/user", name="查询所有用户")
+@user_router.get("/user", name="查询所有用户")
 async def select_all(limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     # from_queryset 针对queryset 对象序列化
@@ -53,7 +53,7 @@ async def select_all(limit: int = 10, page: int = 1):
     return core.Success(data={"total": await models.User.all().count(), "items": data})
 
 
-@users.get("/search/{user_name}", name="模糊查询用户名称")
+@user_router.get("/search/{user_name}", name="模糊查询用户名称")
 async def select_story(user_name: str, limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     try:
@@ -64,7 +64,7 @@ async def select_story(user_name: str, limit: int = 10, page: int = 1):
         return core.Fail(message=f"查看失败.{e}")
 
 
-@users.get("/user/{e_id}", name="用户详情")
+@user_router.get("/user/{e_id}", name="用户详情")
 async def select(e_id: int):
     try:
         data = await models.User_Pydantic.from_queryset_single(models.User.get(id=e_id))
@@ -73,7 +73,7 @@ async def select(e_id: int):
         return core.Fail(message=f"查看详情失败.{e}")
 
 
-@users.put("/user/{e_id}", name="用户编辑")
+@user_router.put("/user/{e_id}", name="用户编辑")
 async def update(e_id: int, user: models.UserIn_Pydantic):
     try:
         await models.User.filter(id=e_id).update(**user.dict(exclude_unset=True))
