@@ -16,7 +16,7 @@ from enum import Enum
 from tortoise import fields, Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.models import Model
-from .enum_filed import PriorityType, StoryType
+from .enum_filed import PriorityType, ReceiveType, StoryType
 
 
 # 抽象模型类
@@ -50,7 +50,7 @@ class Project(AbstractModel):
     desc = fields.TextField(description="项目描述", null=True)
     front_serve = fields.TextField(description="前端服务", null=True)
     back_serve = fields.TextField(description="后端服务", null=True)
-    status = fields.IntField(max_length=1, description="需求状态", default='0')
+    status = fields.IntField(max_length=1, description="需求状态", default='1')
 
     # 查询集最大递归层级
     class PydanticMeta:
@@ -60,11 +60,11 @@ class Project(AbstractModel):
 class Story(AbstractModel):
     name = fields.CharField(max_length=20, description="需求名称", unique=True)
     project = fields.ForeignKeyField('models.Project', related_name='story_router', description="项目ID")
-    type = fields.CharEnumField(StoryType, default=StoryType.demand, description="需求类型")
+    type = fields.CharEnumField(StoryType, default=StoryType.Demand, description="需求类型")
     desc = fields.TextField(description="需求描述", null=True)
     stroy_path = fields.CharField(max_length=255, description="需求链接", null=True, default="")
-    stroy_priority = fields.CharEnumField(PriorityType, default=PriorityType.default, description="优先级")
-    status = fields.IntField(max_length=1, description="需求状态", default='0')
+    stroy_priority = fields.CharEnumField(PriorityType, default=PriorityType.Default, description="优先级")
+    status = fields.IntField(max_length=1, description="需求状态", default='1')
     remark = fields.TextField(description="备注", null=True)
 
     class PydanticMeta:
@@ -74,7 +74,7 @@ class Story(AbstractModel):
 class Task(AbstractModel):
     name = fields.CharField(max_length=20, description="任务名称", unique=True)
     stroy = fields.ForeignKeyField('models.Story', related_name='task', description="需求ID")
-    task_priority = fields.CharEnumField(PriorityType, default=PriorityType.default, description="优先级")
+    task_priority = fields.CharEnumField(PriorityType, default=PriorityType.Default, description="优先级")
     stroy_name = fields.ManyToManyField('models.Staff', related_name='task', through='task_story', description="产品员工ID")
     dev_name = fields.ManyToManyField('models.Staff', related_name='task1', through='task_dev', description="开发员工ID")
     tester_name = fields.ManyToManyField('models.Staff', related_name='task2', through='task_tester', description="测试员工ID")
@@ -83,7 +83,7 @@ class Task(AbstractModel):
     test_time = fields.DateField(description="提测时间", null=True)
     online_time = fields.DateField(description="上线时间", null=True)
     server = fields.CharField(max_length=255, description="发布服务", null=True)
-    status = fields.IntField(max_length=1, description="任务状态", default='0')
+    status = fields.IntField(max_length=1, description="任务状态", default='1')
     remark = fields.TextField(description="备注", null=True)
 
     class PydanticMeta:
@@ -93,10 +93,10 @@ class Task(AbstractModel):
 class Push(AbstractModel):
     project = fields.ForeignKeyField('models.Project', related_name='push_router', description="项目ID")
     name = fields.CharField(max_length=255, description="事件名称", unique=True)
-    receive = fields.CharField(max_length=255, description="接收方式", null=True)
+    receive = fields.CharEnumField(ReceiveType, default=ReceiveType.Dingding, description="接收方式")
     web_hook = fields.CharField(255, description="webhook", unique=True)
     template = fields.CharField(max_length=255, description="模板", null=True)
-    is_active = fields.BooleanField(description="是否激活", default='0')
+    is_active = fields.BooleanField(description="是否激活", default='1')
 
     class PydanticMeta:
         max_recursion = 2

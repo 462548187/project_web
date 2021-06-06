@@ -1,5 +1,6 @@
 fastapi[all]
 passlib[bcrypt]
+uvicorn
 loguru
 aiofiles
 aiohttp
