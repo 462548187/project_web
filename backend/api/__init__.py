@@ -25,7 +25,7 @@ def create_app():
         # 生产关闭swagger
         app = FastAPI(title=settings.APP_NAME, docs_url=None, redoc_url=None)
     else:
-        app = FastAPI(title=settings.TITLE,  description=settings.DESC)
+        app = FastAPI(title=settings.TITLE, description=settings.DESC)
 
     # 挂载静态文件
     app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -40,7 +40,6 @@ def create_app():
         # 使用异常，当无数据是自动返回
         add_exception_handlers=True,
     )
-
 
     # 设置CORS站点
     if settings.BACKEND_CORS_ORIGINS:

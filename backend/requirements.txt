@@ -2,7 +2,6 @@ fastapi[all]
 pydantic
 PyJWT
 passlib[bcrypt]
-requests
 cryptography
 psutil
 paramiko
@@ -12,9 +11,9 @@ bs4
 loguru
 tortoise-orm
 uvicorn
-python-jose
 aiofiles
 aiohttp
 jsonpath
 apscheduler
 aiomysql
+tortoise
