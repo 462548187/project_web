@@ -34,9 +34,9 @@ async def create(push: models.PushIn_Pydantic):
         return core.Fail(message=f"创建失败.{e}")
 
 
-@push_router.delete("/push/{e_id}", name="推送删除")
-async def delete(e_id: int):
-    push_obj = await models.Push.filter(id=e_id).delete()
+@push_router.delete("/push/{push_id}", name="推送删除")
+async def delete(push_id: int):
+    push_obj = await models.Push.filter(id=push_id).delete()
     if push_obj:
         return core.Success()
     return core.Fail(message="推送不存在.")
@@ -60,10 +60,10 @@ async def select_push(push_name: str, limit: int = 10, page: int = 1):
         return core.Fail(message=f"查看失败.{e}")
 
 
-@push_router.put("/push/{e_id}", name="推送编辑")
-async def update(e_id: int, push: models.PushIn_Pydantic):
+@push_router.put("/push/{push_id}", name="推送编辑")
+async def update(push_id: int, push: models.PushIn_Pydantic):
     try:
-        await models.Push.filter(id=e_id).update(**push.dict(exclude_unset=True))
-        return core.Success(data=await models.Push_Pydantic.from_queryset_single(models.Push.get(id=e_id)))
+        await models.Push.filter(id=push_id).update(**push.dict(exclude_unset=True))
+        return core.Success(data=await models.Push_Pydantic.from_queryset_single(models.Push.get(id=push_id)))
     except Exception as e:
         return core.Fail(message=f"更新失败.{e}")

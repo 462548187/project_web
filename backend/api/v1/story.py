@@ -36,9 +36,9 @@ async def create(story: models.StoryIn_Pydantic):
         return core.Fail(message=f"创建失败.{e}")
 
 
-@story_router.delete("/story/{e_id}", name="需求删除")
-async def delete(e_id: int):
-    story_obj = await models.Story.filter(id=e_id).delete()
+@story_router.delete("/story/{story_id}", name="需求删除")
+async def delete(story_id: int):
+    story_obj = await models.Story.filter(id=story_id).delete()
     if story_obj:
         return core.Success()
     return core.Fail(message="需求不存在.")
@@ -52,7 +52,7 @@ async def select_all(limit: int = 10, page: int = 1):
     return core.Success(data={"total": await models.Story.all().count(), "items": data})
 
 
-@story_router.get("/search/{story_name}", name="模糊查询需求名称")
+@story_router.get("/search/{story_name}", name="模糊查询")
 async def select_story(story_name: str, limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     try:
@@ -62,19 +62,19 @@ async def select_story(story_name: str, limit: int = 10, page: int = 1):
         return core.Fail(message=f"查看失败.{e}")
 
 
-@story_router.get("/story/{e_id}", name="需求详情")
-async def select(e_id: int):
+@story_router.get("/story/{story_id}", name="需求详情")
+async def select(story_id: int):
     try:
-        data = await models.Story_Pydantic.from_queryset_single(models.Story.get(id=e_id))
+        data = await models.Story_Pydantic.from_queryset_single(models.Story.get(id=story_id))
         return core.Success(data=data)
     except Exception as e:
         return core.Fail(message=f"查看详情失败.{e}")
 
 
-@story_router.put("/story/{e_id}", name="需求编辑")
-async def update(e_id: int, story: models.StoryIn_Pydantic):
+@story_router.put("/story/{story_id}", name="需求编辑")
+async def update(story_id: int, story: models.StoryIn_Pydantic):
     try:
-        await models.Story.filter(id=e_id).update(**story.dict(exclude_unset=True))
-        return core.Success(data=await models.Story_Pydantic.from_queryset_single(models.Story.get(id=e_id)))
+        await models.Story.filter(id=story_id).update(**story.dict(exclude_unset=True))
+        return core.Success(data=await models.Story_Pydantic.from_queryset_single(models.Story.get(id=story_id)))
     except Exception as e:
         return core.Fail(message=f"更新失败.{e}")

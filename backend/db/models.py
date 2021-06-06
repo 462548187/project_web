@@ -10,7 +10,10 @@
 ------------------------------------
 @ModifyTime     :
 """
-from tortoise import fields
+from typing import List
+from enum import Enum
+
+from tortoise import fields, Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.models import Model
 from .enum_filed import StoryType
@@ -30,11 +33,15 @@ class AbstractModel(Model):
 class User(AbstractModel):
     username = fields.CharField(max_length=255, unique=True, description="用户名")
     password = fields.CharField(max_length=255, description="用户密码")
-    nickname = fields.CharField(max_length=255, description="昵称")
+    is_active = fields.BooleanField(description="是否激活", default='1')
+    avatar = fields.CharField(max_length=255, default="/static/default.jpg", description="用户头像")
+
+
+class Staff(AbstractModel):
+    name = fields.CharField(max_length=255, unique=True, description="员工姓名")
     email = fields.CharField(max_length=255, description="邮箱", null=True)
     mobile = fields.CharField(max_length=255, description="手机", null=True)
-    is_active = fields.BooleanField(max_length=255, description="是否激活", default=1)
-    avatar = fields.CharField(max_length=255, default="/static/default.jpg", description="用户头像")
+    status = fields.BooleanField(max_length=1, description="是否在职", default='1')
 
 
 class Project(AbstractModel):
@@ -42,6 +49,7 @@ class Project(AbstractModel):
     desc = fields.TextField(description="项目描述", null=True)
     front_serve = fields.TextField(description="前端服务", null=True)
     back_serve = fields.TextField(description="后端服务", null=True)
+    status = fields.IntField(max_length=1, description="需求状态", default='0')
 
     # 查询集最大递归层级
     class PydanticMeta:
@@ -49,17 +57,12 @@ class Project(AbstractModel):
 
 
 class Story(AbstractModel):
-    project = fields.ForeignKeyField('models.Project', related_name='story_router', description="项目ID")
     name = fields.CharField(max_length=255, description="需求名称", unique=True)
+    project = fields.ForeignKeyField('models.Project', related_name='story_router', description="项目ID")
     type = fields.CharEnumField(StoryType, default=StoryType.demand, description="需求类型")
     desc = fields.TextField(description="需求描述", null=True)
     stroy_path = fields.CharField(max_length=255, description="需求链接", null=True, default="")
-    stroy_name = fields.CharField(max_length=255, description="需求人", null=True)
-    dev_name = fields.CharField(max_length=255, description="开发人", null=True)
-    test_name = fields.CharField(max_length=255, description="测试人", null=True)
     stroy_priority = fields.CharField(max_length=255, description="需求优先级", null=True)
-    review_time = fields.DateField(description="评审时间", null=True)
-    confirm_time = fields.DateField(description="交底时间", null=True)
     status = fields.IntField(max_length=1, description="需求状态", default='0')
     remark = fields.TextField(description="备注", null=True)
 
@@ -68,8 +71,14 @@ class Story(AbstractModel):
 
 
 class Task(AbstractModel):
-    stroy_id = fields.ForeignKeyField('models.Story', related_name='task_router', description="需求ID")
+    name = fields.CharField(max_length=255, description="任务名称", unique=True)
+    stroy = fields.ForeignKeyField('models.Story', related_name='task_router', description="需求ID")
     task_priority = fields.CharField(max_length=255, description="任务优先级", null=True)
+    stroy_name = fields.ManyToManyField('models.Staff', related_name='task_router1', description="产品员工ID")
+    # dev_name = fields.ManyToManyField('models.Staff', related_name='task_router2', description="员工")
+    # test_name = fields.ManyToManyField('models.Staff', related_name='task_router3', description="员工ID")
+    review_time = fields.DateField(description="评审时间", null=True)
+    confirm_time = fields.DateField(description="交底时间", null=True)
     test_time = fields.DateField(description="提测时间", null=True)
     online_time = fields.DateField(description="上线时间", null=True)
     server = fields.CharField(max_length=255, description="发布服务", null=True)
@@ -81,25 +90,29 @@ class Task(AbstractModel):
 
 
 class Push(AbstractModel):
-    project = fields.ForeignKeyField('models.Project', related_name='push_router', description="所属业务")
+    project = fields.ForeignKeyField('models.Project', related_name='push_router', description="项目ID")
     name = fields.CharField(max_length=255, description="事件名称", unique=True)
     receive = fields.CharField(max_length=255, description="接收方式", null=True)
     web_hook = fields.CharField(255, description="webhook", unique=True)
     template = fields.CharField(max_length=255, description="模板", null=True)
-    is_active = fields.BooleanField(max_length=255, description="是否激活", default=1)
+    is_active = fields.BooleanField(description="是否激活", default='0')
 
     class PydanticMeta:
         max_recursion = 2
 
 
 # 解决pydantic_model_creator 生成的模型中 缺少外键关联字段
-# Tortoise.init_models(["db.models"], "models")
+Tortoise.init_models(["db.models"], "models")
 
 # 返回模型
 User_Pydantic = pydantic_model_creator(User, name="User", exclude=("password",))
 
 # 输入模型 exclude_readonly 只读字段 非必填
 UserIn_Pydantic = pydantic_model_creator(User, name="UserIn", exclude=("avatar",), exclude_readonly=True)
+
+# 项目相关
+Staff_Pydantic = pydantic_model_creator(Staff, name="Staff")
+StaffIn_Pydantic = pydantic_model_creator(Staff, name="StaffIn", exclude_readonly=True)
 
 # 项目相关
 Project_Pydantic = pydantic_model_creator(Project, name="Project")
@@ -116,3 +129,7 @@ TaskIn_Pydantic = pydantic_model_creator(Task, name="TaskIn", exclude_readonly=T
 # 推送相关
 Push_Pydantic = pydantic_model_creator(Push, name="Push")
 PushIn_Pydantic = pydantic_model_creator(Push, name="PushIn", exclude_readonly=True)
+
+
+class TaskInStroyName(TaskIn_Pydantic):
+    stroy_name_list: List[int]
