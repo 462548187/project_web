@@ -10,14 +10,14 @@
 ------------------------------------
 @ModifyTime     :  
 """
-
-from fastapi import APIRouter
 from tortoise.transactions import in_transaction
 
+
 import core
+from fastapi import APIRouter
 from db import models
 
-push_router = APIRouter(tags=["推送"])
+push_router = APIRouter(tags=["推送相关"])
 
 
 @push_router.post("/push", name="推送新增")
@@ -29,12 +29,11 @@ async def create(push: models.PushInName):
     Returns:
     """
     try:
-
         push_name_obj = [await models.Staff.get(id=staff) for staff in push.push_name_list]
         del push.push_name_list
         async with in_transaction():
             push_obj = await models.Push.create(**push.dict(exclude_unset=True))
-            await push_obj.at_name.add(*push_name_obj)
+            # await push_obj.at_name.add(*push_name_obj)
             return core.Success(data=await models.Push_Pydantic.from_tortoise_orm(push_obj))
     except Exception as e:
         return core.Fail(message=f"创建失败.{e}")
@@ -67,9 +66,17 @@ async def select_push(push_name: str, limit: int = 10, page: int = 1):
 
 
 @push_router.put("/push/{push_id}", name="推送编辑")
-async def update(push_id: int, push: models.PushIn_Pydantic):
+async def update(push_id: int, push: models.PushInName):
     try:
-        await models.Push.filter(id=push_id).update(**push.dict(exclude_unset=True))
-        return core.Success(data=await models.Push_Pydantic.from_queryset_single(models.Push.get(id=push_id)))
+        push_obj = await models.Task.get(id=push_id)
+        push_name_obj = [await models.Staff.get(id=staff) for staff in push.push_name_list]
+        del push.push_name_list
+        async with in_transaction():
+            await models.Push.filter(id=push_id).update(**push.dict(exclude_unset=True))
+            # 清除该对象与at_name的关系
+            await push_obj.at_name.clear()
+            # 添加关系
+            await push_obj.at_name.add(*push_name_obj)
+            return core.Success(data=await models.Push_Pydantic.from_queryset_single(models.Push.get(id=push_id)))
     except Exception as e:
         return core.Fail(message=f"更新失败.{e}")

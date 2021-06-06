@@ -94,10 +94,10 @@ class Push(AbstractModel):
     name = fields.CharField(max_length=20, description="推送名称", unique=True)
     project = fields.ForeignKeyField('models.Project', related_name='push', description="项目ID")
     receive = fields.CharEnumField(ReceiveType, default=ReceiveType.Dingding, description="接收方式")
+    at_name = fields.ManyToManyField(model_name='models.Staff', related_name='push', through='push_staff', description="通知自定义ID")
     web_hook = fields.CharField(max_length=255, description="webhook", null=True)
     secret = fields.CharField(max_length=255, description="secret", null=True)
     template = fields.CharField(max_length=255, description="模板", null=True)
-    at_name = fields.ManyToManyField('models.Staff', related_name='push1', through='push_staff', description="通知自定义人")
     at_all = fields.BooleanField(description="通知所有人", default='0')
     is_active = fields.BooleanField(description="是否激活", default='1')
 

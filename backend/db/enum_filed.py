@@ -36,22 +36,22 @@ class Standard(str, Enum):
 
 
 class StoryType(str, Enum):
-    Demand = '需求',
-    Optimization = '优化',
-    Bug = '缺陷',
+    Demand = '需求'
+    Optimization = '优化'
+    Bug = '缺陷'
     Other = '其他'
 
 
 class PriorityType(str, Enum):
     Urgent = '紧急'
-    High = '高',
-    Middle = '中',
-    Low = '低',
+    High = '高'
+    Middle = '中'
+    Low = '低'
     insignificant = '无关紧要'
     Default = '空'
 
 
 class ReceiveType(str, Enum):
     Dingding = '钉钉'
-    Email = '邮件',
+    Email = '邮件'
     Weixin = '微信'

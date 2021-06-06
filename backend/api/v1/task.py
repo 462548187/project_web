@@ -38,7 +38,7 @@ async def create(task: models.TaskInStroyName):
             await task_obj.stroy_name.add(*story_obj)
             await task_obj.dev_name.add(*dev_obj)
             await task_obj.tester_name.add(*tester_obj)
-            
+
             return core.Success(data=await models.Task_Pydantic.from_tortoise_orm(task_obj))
     except Exception as e:
         return core.Fail(message=f"创建失败.{e}")
@@ -60,7 +60,7 @@ async def select_all(limit: int = 10, page: int = 1):
     return core.Success(data={"total": await models.Task.all().count(), "items": data})
 
 
-@task_router.get("/search/{task_name}", name="模糊查询任务名称")
+@task_router.get("/search/{task_name}", name="模糊查询")
 async def select_task(task_name: str, limit: int = 10, page: int = 1):
     skip = (page - 1) * limit
     try:
@@ -86,7 +86,7 @@ async def update(task_id: int, task: models.TaskInStroyName):
         story_obj = [await models.Staff.get(id=staff) for staff in task.stroy_name_list]
         dev_obj = [await models.Staff.get(id=staff) for staff in task.stroy_dev_list]
         tester_obj = [await models.Staff.get(id=staff) for staff in task.stroy_tester_list]
-        del task.stroy_name_list
+        del task.stroy_name_list, task.stroy_dev_list, task.stroy_tester_list
         async with in_transaction():
             await models.Task.filter(id=task_id).update(**task.dict(exclude_unset=True))
             # 清除该对象与stroy_name的关系
