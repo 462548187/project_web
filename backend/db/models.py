@@ -16,7 +16,7 @@ from enum import Enum
 from tortoise import fields, Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.models import Model
-from .enum_filed import StoryType
+from .enum_filed import PriorityType, StoryType
 
 
 # 抽象模型类
@@ -31,21 +31,22 @@ class AbstractModel(Model):
 
 
 class User(AbstractModel):
-    username = fields.CharField(max_length=255, unique=True, description="用户名")
+    username = fields.CharField(max_length=20, unique=True, description="用户名")
     password = fields.CharField(max_length=255, description="用户密码")
     is_active = fields.BooleanField(description="是否激活", default='1')
     avatar = fields.CharField(max_length=255, default="/static/default.jpg", description="用户头像")
 
 
 class Staff(AbstractModel):
-    name = fields.CharField(max_length=255, unique=True, description="员工姓名")
-    email = fields.CharField(max_length=255, description="邮箱", null=True)
-    mobile = fields.CharField(max_length=255, description="手机", null=True)
+    name = fields.CharField(max_length=25, unique=True, description="员工姓名")
+    email = fields.CharField(max_length=50, description="邮箱", null=True)
+    mobile = fields.CharField(max_length=11, description="手机", null=True)
+    department = fields.CharField(max_length=20, description="部门", null=True)
     status = fields.BooleanField(max_length=1, description="是否在职", default='1')
 
 
 class Project(AbstractModel):
-    name = fields.CharField(max_length=255, description="项目名称", unique=True)
+    name = fields.CharField(max_length=20, description="项目名称", unique=True)
     desc = fields.TextField(description="项目描述", null=True)
     front_serve = fields.TextField(description="前端服务", null=True)
     back_serve = fields.TextField(description="后端服务", null=True)
@@ -57,12 +58,12 @@ class Project(AbstractModel):
 
 
 class Story(AbstractModel):
-    name = fields.CharField(max_length=255, description="需求名称", unique=True)
+    name = fields.CharField(max_length=20, description="需求名称", unique=True)
     project = fields.ForeignKeyField('models.Project', related_name='story_router', description="项目ID")
     type = fields.CharEnumField(StoryType, default=StoryType.demand, description="需求类型")
     desc = fields.TextField(description="需求描述", null=True)
     stroy_path = fields.CharField(max_length=255, description="需求链接", null=True, default="")
-    stroy_priority = fields.CharField(max_length=255, description="需求优先级", null=True)
+    stroy_priority = fields.CharEnumField(PriorityType, default=PriorityType.default, description="优先级")
     status = fields.IntField(max_length=1, description="需求状态", default='0')
     remark = fields.TextField(description="备注", null=True)
 
@@ -71,9 +72,9 @@ class Story(AbstractModel):
 
 
 class Task(AbstractModel):
-    name = fields.CharField(max_length=255, description="任务名称", unique=True)
+    name = fields.CharField(max_length=20, description="任务名称", unique=True)
     stroy = fields.ForeignKeyField('models.Story', related_name='task', description="需求ID")
-    task_priority = fields.CharField(max_length=255, description="任务优先级", null=True)
+    task_priority = fields.CharEnumField(PriorityType, default=PriorityType.default, description="优先级")
     stroy_name = fields.ManyToManyField('models.Staff', related_name='task', through='task_story', description="产品员工ID")
     dev_name = fields.ManyToManyField('models.Staff', related_name='task1', through='task_dev', description="开发员工ID")
     tester_name = fields.ManyToManyField('models.Staff', related_name='task2', through='task_tester', description="测试员工ID")

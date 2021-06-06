@@ -40,3 +40,12 @@ class StoryType(str, Enum):
     optimization = '优化',
     bug = '缺陷',
     others = '其他'
+
+
+class PriorityType(str, Enum):
+    urgent = '紧急'
+    High = '高',
+    Middle = '中',
+    Low = '低',
+    insignificant = '无关紧要'
+    default = '空'
