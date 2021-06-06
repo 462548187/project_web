@@ -1,11 +1,14 @@
-#!/usr/bin/env/ python3
-# -*- coding:utf-8 -*-
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-@Project: apiAutoTestFastApi
-@File  :util.py
-@Author:liuyue
-@Date  :2021/4/28 10:54
-@Desc  : 其他工具路由
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  until.py
+@Description    :  其他路由
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
 from tortoise.transactions import in_transaction
 

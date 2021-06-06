@@ -1,6 +1,12 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-project: apiAutoTestWeb
-file: __init__.py
-author: liuyue
-date: 2021/4/17
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  __init__.py
+@Description    :
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """

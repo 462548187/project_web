@@ -1,8 +1,14 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-project: apiAutoTestWeb
-file: config.py
-author: liuyue
-date: 2021/4/17
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  config.py
+@Description    :
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
 import os
 import secrets

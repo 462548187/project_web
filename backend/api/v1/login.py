@@ -1,15 +1,20 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-project: apiAutoTestWeb
-file: login.py
-author: liuyue
-date: 2021/4/17
-desc: 鉴权处理
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  login.py
+@Description    : 鉴权处理
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
+import core
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException, status
 from loguru import logger
-import core
 from db import models
 
 login_router = APIRouter(tags=["登录相关"])

@@ -1,11 +1,14 @@
-#!/usr/bin/env/ python3
-# -*- coding:utf-8 -*-
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-@Project: apiAutoTestFastAPI
-@File  :enum_filed.py
-@Author:liuyue
-@Date  :2021/4/22 21:40
-@Desc  : 枚举类的字段
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  enum_filed.py
+@Description    :  枚举类字符串
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
 from enum import Enum
 

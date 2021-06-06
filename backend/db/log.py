@@ -1,10 +1,15 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-project: apiAutoTestWeb
-file: log.py
-author: liuyue
-date: 2021/4/17
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  log.py
+@Description    :  数据库日志
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
-# 数据库日志
 import logging
 import sys
 

@@ -1,8 +1,14 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
-project: apiAutoTestWeb
-file: main.py
-author: liuyue
-date: 2021/4/17
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  main.py
+@Description    :  主入口
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
 """
 
 from api import create_app

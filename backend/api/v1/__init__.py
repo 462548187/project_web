@@ -1,10 +1,21 @@
-from fastapi import APIRouter, Depends
-
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
+"""
+@Author         :  Liu Yue
+@Version        :
+------------------------------------
+@File           :  __init__.py
+@Description    :
+@CreateTime     :  2021/5/29, 11:44
+------------------------------------
+@ModifyTime     :
+"""
 import core
 from .user import user_router
 from .project import project_router
 from .story import story_router
 from .push import push_router
+from fastapi import APIRouter, Depends
 
 v1 = APIRouter(prefix="/v1", dependencies=[Depends(core.get_current_user)])
 

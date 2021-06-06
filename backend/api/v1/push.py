@@ -5,7 +5,7 @@
 @Version        :  
 ------------------------------------
 @File           :  push.py
-@Description    :  
+@Description    :  推送路由
 @CreateTime     :  2021/6/3 12:49 上午
 ------------------------------------
 @ModifyTime     :  
