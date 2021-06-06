@@ -12,6 +12,7 @@
 """
 
 from fastapi import APIRouter
+from tortoise.transactions import in_transaction
 
 import core
 from db import models
@@ -20,7 +21,7 @@ push_router = APIRouter(tags=["推送"])
 
 
 @push_router.post("/push", name="推送新增")
-async def create(push: models.PushIn_Pydantic):
+async def create(push: models.PushInName):
     """
     环境新增数据库配置目前只提供mysql，需按照如下字典配置
     Args:
@@ -28,8 +29,13 @@ async def create(push: models.PushIn_Pydantic):
     Returns:
     """
     try:
-        push_obj = await models.Push.create(**push.dict(exclude_unset=True))
-        return core.Success(data=await models.Push_Pydantic.from_tortoise_orm(push_obj))
+
+        push_name_obj = [await models.Staff.get(id=staff) for staff in push.push_name_list]
+        del push.push_name_list
+        async with in_transaction():
+            push_obj = await models.Push.create(**push.dict(exclude_unset=True))
+            await push_obj.at_name.add(*push_name_obj)
+            return core.Success(data=await models.Push_Pydantic.from_tortoise_orm(push_obj))
     except Exception as e:
         return core.Fail(message=f"创建失败.{e}")
 

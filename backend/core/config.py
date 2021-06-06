@@ -68,9 +68,9 @@ class Settings(BaseSettings):
     # logger = logger
     logger.add(f"{LOG_FOLDER}/fastapi_log_{t}.log", rotation="00:00", encoding="utf-8", retention="30 days")
 
-    DINGDING_WEBHOOK = 'https://oapi.dingtalk.com/robot/send?access_token=26c3772451872f111251362e908a7cae0ff49814d54f861d54d0ed2c8eb18e44'
-    DINGDING_SECRET = 'SEC43f155e2fbeab82d83ea48ada18218dcfd4cb73d09de1ecb491d167890e7e451'
-    USER_CREATE_MSG = '测试中台系统推送:账号:{},密码：{}'
+    # DINGDING_WEBHOOK = 'https://oapi.dingtalk.com/robot/send?access_token=26c3772451872f111251362e908a7cae0ff49814d54f861d54d0ed2c8eb18e44'
+    # DINGDING_SECRET = 'SEC43f155e2fbeab82d83ea48ada18218dcfd4cb73d09de1ecb491d167890e7e451'
+    # USER_CREATE_MSG = '测试中台系统推送:账号:{},密码：{}'
 
 
 settings = Settings()

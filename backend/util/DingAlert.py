@@ -50,8 +50,8 @@ class DingAlert:
         :return:
         """
         # 生成调用url
-        # if at_mobiles is None:
-        #     at_mobiles = []
+        if at_mobiles is None:
+            at_mobiles = []
         secret = create_secret(self.secret)
         ding_url = f"{self.webhook}&timestamp={secret.get('timestamp')}&sign={secret.get('sign')}"
         message = {"msgtype": "text", "text": {"content": content}, "at": {"atMobiles": at_mobiles, "isAtAll": at_all}}

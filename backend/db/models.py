@@ -42,7 +42,7 @@ class Staff(AbstractModel):
     email = fields.CharField(max_length=50, description="邮箱", null=True)
     mobile = fields.CharField(max_length=11, description="手机", null=True)
     department = fields.CharField(max_length=20, description="部门", null=True)
-    status = fields.BooleanField(max_length=1, description="是否在职", default='1')
+    status = fields.BooleanField(description="是否在职", default='1')
 
 
 class Project(AbstractModel):
@@ -91,11 +91,14 @@ class Task(AbstractModel):
 
 
 class Push(AbstractModel):
-    project = fields.ForeignKeyField('models.Project', related_name='push_router', description="项目ID")
-    name = fields.CharField(max_length=255, description="事件名称", unique=True)
+    name = fields.CharField(max_length=20, description="推送名称", unique=True)
+    project = fields.ForeignKeyField('models.Project', related_name='push', description="项目ID")
     receive = fields.CharEnumField(ReceiveType, default=ReceiveType.Dingding, description="接收方式")
-    web_hook = fields.CharField(255, description="webhook", unique=True)
+    web_hook = fields.CharField(max_length=255, description="webhook", null=True)
+    secret = fields.CharField(max_length=255, description="secret", null=True)
     template = fields.CharField(max_length=255, description="模板", null=True)
+    at_name = fields.ManyToManyField('models.Staff', related_name='push1', through='push_staff', description="通知自定义人")
+    at_all = fields.BooleanField(description="通知所有人", default='0')
     is_active = fields.BooleanField(description="是否激活", default='1')
 
     class PydanticMeta:
@@ -136,3 +139,7 @@ class TaskInStroyName(TaskIn_Pydantic):
     stroy_name_list: List[int]
     stroy_dev_list: List[int]
     stroy_tester_list: List[int]
+
+
+class PushInName(PushIn_Pydantic):
+    push_name_list: List[int]
