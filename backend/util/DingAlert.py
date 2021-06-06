@@ -50,8 +50,8 @@ class DingAlert:
         :return:
         """
         # 生成调用url
-        if at_mobiles is None:
-            at_mobiles = []
+        # if at_mobiles is None:
+        #     at_mobiles = []
         secret = create_secret(self.secret)
         ding_url = f"{self.webhook}&timestamp={secret.get('timestamp')}&sign={secret.get('sign')}"
         message = {"msgtype": "text", "text": {"content": content}, "at": {"atMobiles": at_mobiles, "isAtAll": at_all}}
@@ -106,4 +106,5 @@ class DingAlert:
 
 if __name__ == '__main__':
     ding_alert = DingAlert(webhook=settings.DINGDING_WEBHOOK, secret=settings.DINGDING_SECRET)
-    ding_alert.send_markdown(title="新账户创建", text=settings.USER_CREATE_MSG.format("huangtao", "123456"))
+    # ding_alert.send_markdown(title="新账户创建", text=settings.USER_CREATE_MSG.format("huangtao", "123456"), at_all=True)
+    ding_alert.send_text(content=settings.USER_CREATE_MSG.format("huangtao", "123456"), at_mobiles=["15000220028"], at_all=True)

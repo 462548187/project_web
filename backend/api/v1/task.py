@@ -38,6 +38,7 @@ async def create(task: models.TaskInStroyName):
             await task_obj.stroy_name.add(*story_obj)
             await task_obj.dev_name.add(*dev_obj)
             await task_obj.tester_name.add(*tester_obj)
+            
             return core.Success(data=await models.Task_Pydantic.from_tortoise_orm(task_obj))
     except Exception as e:
         return core.Fail(message=f"创建失败.{e}")
