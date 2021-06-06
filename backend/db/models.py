@@ -72,11 +72,11 @@ class Story(AbstractModel):
 
 class Task(AbstractModel):
     name = fields.CharField(max_length=255, description="任务名称", unique=True)
-    stroy = fields.ForeignKeyField('models.Story', related_name='task_router', description="需求ID")
+    stroy = fields.ForeignKeyField('models.Story', related_name='task', description="需求ID")
     task_priority = fields.CharField(max_length=255, description="任务优先级", null=True)
-    stroy_name = fields.ManyToManyField('models.Staff', related_name='task_router1', description="产品员工ID")
-    # dev_name = fields.ManyToManyField('models.Staff', related_name='task_router2', description="员工")
-    # test_name = fields.ManyToManyField('models.Staff', related_name='task_router3', description="员工ID")
+    stroy_name = fields.ManyToManyField('models.Staff', related_name='task', through='task_story', description="产品员工ID")
+    dev_name = fields.ManyToManyField('models.Staff', related_name='task1', through='task_dev', description="开发员工ID")
+    tester_name = fields.ManyToManyField('models.Staff', related_name='task2', through='task_tester', description="测试员工ID")
     review_time = fields.DateField(description="评审时间", null=True)
     confirm_time = fields.DateField(description="交底时间", null=True)
     test_time = fields.DateField(description="提测时间", null=True)
@@ -133,3 +133,5 @@ PushIn_Pydantic = pydantic_model_creator(Push, name="PushIn", exclude_readonly=T
 
 class TaskInStroyName(TaskIn_Pydantic):
     stroy_name_list: List[int]
+    stroy_dev_list: List[int]
+    stroy_tester_list: List[int]

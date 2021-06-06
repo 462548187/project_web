@@ -29,11 +29,15 @@ async def create(task: models.TaskInStroyName):
 
     """
     try:
-        staff_obj = [await models.Staff.get(id=staff) for staff in task.stroy_name_list]
-        del task.stroy_name_list
+        story_obj = [await models.Staff.get(id=staff) for staff in task.stroy_name_list]
+        dev_obj = [await models.Staff.get(id=staff) for staff in task.stroy_dev_list]
+        tester_obj = [await models.Staff.get(id=staff) for staff in task.stroy_tester_list]
+        del task.stroy_name_list, task.stroy_dev_list, task.stroy_tester_list
         async with in_transaction():
             task_obj = await models.Task.create(**task.dict(exclude_unset=True))
-            await task_obj.stroy_name.add(*staff_obj)
+            await task_obj.stroy_name.add(*story_obj)
+            await task_obj.dev_name.add(*dev_obj)
+            await task_obj.tester_name.add(*tester_obj)
             return core.Success(data=await models.Task_Pydantic.from_tortoise_orm(task_obj))
     except Exception as e:
         return core.Fail(message=f"创建失败.{e}")
@@ -78,14 +82,20 @@ async def select(task_id: int):
 async def update(task_id: int, task: models.TaskInStroyName):
     try:
         task_obj = await models.Task.get(id=task_id)
-        staff_obj = [await models.Staff.get(id=staff) for staff in task.stroy_name_list]
+        story_obj = [await models.Staff.get(id=staff) for staff in task.stroy_name_list]
+        dev_obj = [await models.Staff.get(id=staff) for staff in task.stroy_dev_list]
+        tester_obj = [await models.Staff.get(id=staff) for staff in task.stroy_tester_list]
         del task.stroy_name_list
         async with in_transaction():
             await models.Task.filter(id=task_id).update(**task.dict(exclude_unset=True))
             # 清除该对象与stroy_name的关系
             await task_obj.stroy_name.clear()
+            await task_obj.dev_name.clear()
+            await task_obj.tester_name.clear()
             # 添加关系
-            await task_obj.stroy_name.add(*staff_obj)
+            await task_obj.stroy_name.add(*story_obj)
+            await task_obj.dev_name.add(*dev_obj)
+            await task_obj.tester_name.add(*tester_obj)
             return core.Success(data=await models.Task_Pydantic.from_queryset_single(models.Task.get(id=task_id)))
     except Exception as e:
         return core.Fail(message=f"更新失败.{e}")
