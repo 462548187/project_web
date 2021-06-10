@@ -15,7 +15,6 @@ from db import models
 from typing import Optional
 from fastapi import APIRouter
 
-
 project_router = APIRouter(tags=['项目相关'])
 
 
@@ -27,7 +26,7 @@ async def update(project_id: Optional[int], project: models.ProjectIn_Pydantic):
     """
     try:
         # 判断项目是否被删除
-        data = await models.Project.filter(id=project_id).filter(deleted=1)
+        data = await models.Project.filter(id=project_id, deleted=1)
         if data:
             return core.Fail(message="项目已被删除.")
         # 创建或更新项目
@@ -57,7 +56,7 @@ async def delete(project_id: Optional[int]):
         # 判断项目是否存在
         await models.Project.get(id=project_id)
         # 判断项目是否被删除
-        is_deleted = await models.Project.filter(id=project_id).filter(deleted=1)
+        is_deleted = await models.Project.filter(id=project_id, deleted=1)
         if is_deleted:
             return core.Fail(message="项目已被删除.")
         # 更新项目是否删除为1
@@ -92,7 +91,7 @@ async def select(project_id: Optional[int]):
         # 判断项目是否存在
         await models.Project.get(id=project_id)
         # 判断项目是否被删除
-        is_deleted = await models.Project.filter(id=project_id).filter(deleted=1)
+        is_deleted = await models.Project.filter(id=project_id, deleted=1)
         if is_deleted:
             return core.Fail(message="项目已被删除.")
         data = await models.Project_Pydantic.from_queryset_single(models.Project.get(id=project_id))
