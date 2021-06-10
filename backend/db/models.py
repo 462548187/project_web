@@ -22,7 +22,6 @@ from .enum_filed import PriorityType, ReceiveType, StoryType
 # 抽象模型类
 class AbstractModel(Model):
     id = fields.IntField(pk=True, index=True)
-    name = fields.CharField(255, description="名称")
     created_at = fields.DatetimeField(auto_now_add=True)
     modified_at = fields.DatetimeField(auto_now=True)
 
@@ -33,24 +32,26 @@ class AbstractModel(Model):
 class User(AbstractModel):
     username = fields.CharField(max_length=20, unique=True, description="用户名")
     password = fields.CharField(max_length=255, description="用户密码")
-    is_active = fields.BooleanField(description="是否激活", default='1')
+    is_active = fields.IntField(description="是否激活", default='1')
     avatar = fields.CharField(max_length=255, default="/static/default.jpg", description="用户头像")
 
 
 class Staff(AbstractModel):
-    name = fields.CharField(max_length=25, unique=True, description="员工姓名")
+    name = fields.CharField(max_length=25,  description="员工姓名")
     email = fields.CharField(max_length=50, description="邮箱", null=True)
     mobile = fields.CharField(max_length=11, description="手机", null=True)
     department = fields.CharField(max_length=20, description="部门", null=True)
-    status = fields.BooleanField(description="是否在职", default='1')
+    status = fields.IntField(description="是否在职", default='1')
+    deleted = fields.IntField(description="是否已删除", default='0')
 
 
 class Project(AbstractModel):
-    name = fields.CharField(max_length=20, description="项目名称", unique=True)
+    name = fields.CharField(max_length=20, description="项目名称")
     desc = fields.TextField(description="项目描述", null=True)
     front_serve = fields.TextField(description="前端服务", null=True)
     back_serve = fields.TextField(description="后端服务", null=True)
     status = fields.IntField(max_length=1, description="需求状态", default='1')
+    deleted = fields.IntField(description="是否已删除", default='0')
 
     # 查询集最大递归层级
     class PydanticMeta:
@@ -58,13 +59,14 @@ class Project(AbstractModel):
 
 
 class Story(AbstractModel):
-    name = fields.CharField(max_length=20, description="需求名称", unique=True)
+    name = fields.CharField(max_length=20, description="需求名称")
     project = fields.ForeignKeyField('models.Project', related_name='story_router', description="项目ID")
     type = fields.CharEnumField(StoryType, default=StoryType.Demand, description="需求类型")
     desc = fields.TextField(description="需求描述", null=True)
     stroy_path = fields.CharField(max_length=255, description="需求链接", null=True, default="")
     stroy_priority = fields.CharEnumField(PriorityType, default=PriorityType.Default, description="优先级")
     status = fields.IntField(max_length=1, description="需求状态", default='1')
+    deleted = fields.IntField(description="是否已删除", default='0')
     remark = fields.TextField(description="备注", null=True)
 
     class PydanticMeta:
@@ -72,7 +74,7 @@ class Story(AbstractModel):
 
 
 class Task(AbstractModel):
-    name = fields.CharField(max_length=20, description="任务名称", unique=True)
+    name = fields.CharField(max_length=20, description="任务名称")
     stroy = fields.ForeignKeyField('models.Story', related_name='task', description="需求ID")
     task_priority = fields.CharEnumField(PriorityType, default=PriorityType.Default, description="优先级")
     stroy_name = fields.ManyToManyField('models.Staff', related_name='task', through='task_story', description="产品员工ID")
@@ -84,6 +86,7 @@ class Task(AbstractModel):
     online_time = fields.DateField(description="上线时间", null=True)
     server = fields.CharField(max_length=255, description="发布服务", null=True)
     status = fields.IntField(max_length=1, description="任务状态", default='1')
+    deleted = fields.IntField(description="是否已删除", default='0')
     remark = fields.TextField(description="备注", null=True)
 
     class PydanticMeta:
@@ -91,15 +94,16 @@ class Task(AbstractModel):
 
 
 class Push(AbstractModel):
-    name = fields.CharField(max_length=20, description="推送名称", unique=True)
+    name = fields.CharField(max_length=20, description="推送名称")
     project = fields.ForeignKeyField('models.Project', related_name='push', description="项目ID")
     receive = fields.CharEnumField(ReceiveType, default=ReceiveType.Dingding, description="接收方式")
     at_name = fields.ManyToManyField(model_name='models.Staff', related_name='push', through='push_staff', description="通知自定义ID")
     web_hook = fields.CharField(max_length=255, description="webhook", null=True)
     secret = fields.CharField(max_length=255, description="secret", null=True)
     template = fields.CharField(max_length=255, description="模板", null=True)
-    at_all = fields.BooleanField(description="通知所有人", default='0')
-    is_active = fields.BooleanField(description="是否激活", default='1')
+    at_all = fields.IntField(description="通知所有人", default='0')
+    is_active = fields.IntField(description="是否激活", default='1')
+    deleted = fields.IntField(description="是否已删除", default='0')
 
     class PydanticMeta:
         max_recursion = 2

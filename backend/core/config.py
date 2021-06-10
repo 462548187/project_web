@@ -39,7 +39,8 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:8000"]
 
     # db配置
-    DB_URL = "mysql://root:123456@127.0.0.1:3306/project_web"
+    # DB_URL = "mysql://user_test:5ttYq*D99oTe7pKx@172.16.101.10:3307/project_web"
+    DB_URL = "mysql://root:123456@localhost:3306/project_web"
 
     # 启动端口配置
     PORT = 8999
