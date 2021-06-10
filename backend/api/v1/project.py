@@ -21,6 +21,10 @@ project_router = APIRouter(tags=['项目相关'])
 
 @project_router.post("/project/add/{project_id}", name="新增编辑项目")
 async def update(project_id: Optional[int], project: models.ProjectIn_Pydantic):
+    """
+    新增和编辑项目的接口\n
+    project_id: 项目ID
+    """
     try:
         # 判断项目是否被删除
         data = await models.Project.filter(id=project_id).filter(deleted=1)
@@ -41,6 +45,10 @@ async def update(project_id: Optional[int], project: models.ProjectIn_Pydantic):
 
 @project_router.delete("/project/del/{project_id}", name="删除项目")
 async def delete(project_id: Optional[int]):
+    """
+    删除项目的接口\n
+    project_id: 项目ID
+    """
     try:
         # 判断项目是否被删除
         data = await models.Project.filter(id=project_id).filter(deleted=1)
@@ -56,6 +64,11 @@ async def delete(project_id: Optional[int]):
 # https://tortoise-orm.readthedocs.io/en/latest/CHANGELOG.html?highlight=from_queryset_single#id27
 @project_router.get("/project/getAll", name="获取所有项目")
 async def select_all(limit: int = 10, page: int = 1):
+    """
+    获得所有项目接口\n
+    limit： 每页条数\n
+    int： 当前页面
+    """
     skip = (page - 1) * limit
     # from_queryset 针对queryset 对象序列化
     data = await models.Project_Pydantic.from_queryset(models.Project.filter(deleted=0).all().order_by('-created_at').offset(skip).limit(limit))
@@ -64,6 +77,10 @@ async def select_all(limit: int = 10, page: int = 1):
 
 @project_router.get("/project/detail/{project_id}", name="获取项目详细")
 async def select(project_id: Optional[int]):
+    """
+    获取指定项目ID详情接口\n
+    project_id: 项目ID
+    """
     try:
         # 获取指定项目
         data = await models.Project_Pydantic.from_queryset_single(models.Project.get(id=project_id))
@@ -74,6 +91,9 @@ async def select(project_id: Optional[int]):
 
 @project_router.get("/project/getAllNoPage", name="获取所有项目不分页")
 async def get_projects():
+    """
+    获取全部分页内容，不支持分页
+    """
     # 按照不分页结构显示
     data = await models.Project_Pydantic.from_queryset(models.Project.filter(deleted=0).all())
     return core.Success(data={"total": len(data), "items": data})

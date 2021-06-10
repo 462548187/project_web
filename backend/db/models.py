@@ -21,9 +21,9 @@ from .enum_filed import PriorityType, ReceiveType, StoryType
 
 # 抽象模型类
 class AbstractModel(Model):
-    id = fields.IntField(pk=True, index=True)
-    created_at = fields.DatetimeField(auto_now_add=True)
-    modified_at = fields.DatetimeField(auto_now=True)
+    id = fields.IntField(pk=True, index=True, description="ID")
+    created_at = fields.DatetimeField(auto_now_add=True, description="创建时间")
+    modified_at = fields.DatetimeField(auto_now=True, description="修改时间")
 
     class Meta:
         abstract = True
@@ -63,8 +63,8 @@ class Story(AbstractModel):
     project = fields.ForeignKeyField('models.Project', related_name='story_router', description="项目ID")
     type = fields.CharEnumField(StoryType, default=StoryType.Demand, description="需求类型")
     desc = fields.TextField(description="需求描述", null=True)
-    stroy_path = fields.CharField(max_length=255, description="需求链接", null=True, default="")
-    stroy_priority = fields.CharEnumField(PriorityType, default=PriorityType.Default, description="优先级")
+    story_path = fields.CharField(max_length=255, description="需求链接", null=True, default="")
+    story_priority = fields.CharEnumField(PriorityType, default=PriorityType.Default, description="优先级")
     status = fields.IntField(max_length=1, description="需求状态", default='1')
     deleted = fields.IntField(description="是否已删除", default='0')
     remark = fields.TextField(description="备注", null=True)
@@ -139,10 +139,10 @@ Push_Pydantic = pydantic_model_creator(Push, name="Push")
 PushIn_Pydantic = pydantic_model_creator(Push, name="PushIn", exclude_readonly=True)
 
 
-class TaskInStroyName(TaskIn_Pydantic):
-    stroy_name_list: List[int]
-    stroy_dev_list: List[int]
-    stroy_tester_list: List[int]
+class TaskInStoryName(TaskIn_Pydantic):
+    story_name_list: List[int]
+    story_dev_list: List[int]
+    story_tester_list: List[int]
 
 
 class PushInName(PushIn_Pydantic):

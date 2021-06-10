@@ -20,7 +20,7 @@ task_router = APIRouter(tags=["任务相关"])
 
 
 @task_router.post("/task", name="任务新增")
-async def create(task: models.TaskInStroyName):
+async def create(task: models.TaskInStoryName):
     """
     环境新增数据库配置目前只提供mysql，需按照如下字典配置
     Args:
@@ -29,10 +29,10 @@ async def create(task: models.TaskInStroyName):
 
     """
     try:
-        story_obj = [await models.Staff.get(id=staff) for staff in task.stroy_name_list]
-        dev_obj = [await models.Staff.get(id=staff) for staff in task.stroy_dev_list]
-        tester_obj = [await models.Staff.get(id=staff) for staff in task.stroy_tester_list]
-        del task.stroy_name_list, task.stroy_dev_list, task.stroy_tester_list
+        story_obj = [await models.Staff.get(id=staff) for staff in task.story_name_list]
+        dev_obj = [await models.Staff.get(id=staff) for staff in task.story_dev_list]
+        tester_obj = [await models.Staff.get(id=staff) for staff in task.story_tester_list]
+        del task.story_name_list, task.story_dev_list, task.story_tester_list
         async with in_transaction():
             task_obj = await models.Task.create(**task.dict(exclude_unset=True))
             await task_obj.stroy_name.add(*story_obj)
@@ -80,13 +80,13 @@ async def select(task_id: int):
 
 
 @task_router.put("/task/{task_id}", name="任务编辑")
-async def update(task_id: int, task: models.TaskInStroyName):
+async def update(task_id: int, task: models.TaskInStoryName):
     try:
         task_obj = await models.Task.get(id=task_id)
-        story_obj = [await models.Staff.get(id=staff) for staff in task.stroy_name_list]
-        dev_obj = [await models.Staff.get(id=staff) for staff in task.stroy_dev_list]
-        tester_obj = [await models.Staff.get(id=staff) for staff in task.stroy_tester_list]
-        del task.stroy_name_list, task.stroy_dev_list, task.stroy_tester_list
+        story_obj = [await models.Staff.get(id=staff) for staff in task.story_name_list]
+        dev_obj = [await models.Staff.get(id=staff) for staff in task.story_dev_list]
+        tester_obj = [await models.Staff.get(id=staff) for staff in task.story_tester_list]
+        del task.story_name_list, task.story_dev_list, task.story_tester_list
         async with in_transaction():
             await models.Task.filter(id=task_id).update(**task.dict(exclude_unset=True))
             # 清除该对象与stroy_name的关系
