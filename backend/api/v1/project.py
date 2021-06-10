@@ -31,8 +31,12 @@ async def update(project_id: Optional[int], project: models.ProjectIn_Pydantic):
             return core.Fail(message="项目不存在.")
         # 创建或更新项目
         else:
-            await models.Project.filter(id=project_id).update(**project.dict(exclude_unset=True))
-            return core.Success(data=await models.Project_Pydantic.from_queryset_single(models.Project.get(id=project_id)))
+            if await models.Project.filter(id=project_id):
+                await models.Project.filter(id=project_id).update(**project.dict(exclude_unset=True))
+                return core.Success(data=await models.Project_Pydantic.from_queryset_single(models.Project.get(id=project_id)))
+            else:
+                project_obj = await models.Project.create(**project.dict(exclude_unset=True))
+                return core.Success(data=await models.Project_Pydantic.from_tortoise_orm(project_obj))
     except Exception as e:
         return core.Fail(message="项目已存在.")
 
