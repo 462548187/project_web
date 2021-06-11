@@ -18,7 +18,7 @@ from fastapi import APIRouter
 project_router = APIRouter(tags=['项目相关'])
 
 
-@project_router.post("/project/add/{project_id}", name="新增编辑项目")
+@project_router.post("/project/add/{project_id}", name="项目新增编辑")
 async def update(project_id: Optional[int], project: models.ProjectIn_Pydantic):
     """
     - 新增和编辑项目的接口\n

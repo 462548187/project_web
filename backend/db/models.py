@@ -37,12 +37,16 @@ class User(AbstractModel):
 
 
 class Staff(AbstractModel):
-    name = fields.CharField(max_length=25,  description="员工姓名")
+    name = fields.CharField(max_length=25, description="员工姓名")
     email = fields.CharField(max_length=50, description="邮箱", null=True)
     mobile = fields.CharField(max_length=11, description="手机", null=True)
     department = fields.CharField(max_length=20, description="部门", null=True)
     status = fields.IntField(description="是否在职", default='1')
     deleted = fields.IntField(description="是否已删除", default='0')
+
+    # 查询集最大递归层级
+    class PydanticMeta:
+        max_recursion = 1
 
 
 class Project(AbstractModel):
