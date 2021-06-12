@@ -18,7 +18,7 @@ project_router = APIRouter(tags=['项目相关'])
 
 
 @project_router.post("/project/add", name="项目新增编辑")
-async def update(project: models.ProjectInBase):
+async def update(project: models.ProjectIn_Pydantic):
     """
     - 新增和编辑项目的接口，项目名称name为必须传参数\n
     - name: 项目名称
@@ -51,7 +51,7 @@ async def update(project: models.ProjectInBase):
 
 
 @project_router.delete("/project/del", name="删除项目")
-async def delete(project: models.ProjectInBase):
+async def delete(project: core.NameBase):
     """
     - 删除项目的接口\n
     - name: 项目名称【必填】
@@ -72,7 +72,7 @@ async def delete(project: models.ProjectInBase):
 
 
 @project_router.post("/project/res", name="恢复项目")
-async def restore(project: models.ProjectInBase):
+async def restore(project: core.NameBase):
     """
     - 恢复项目的接口\n
     - name: 项目名称【必填】
@@ -102,12 +102,12 @@ async def select_all(limit: int = 10, page: int = 1):
     """
     skip = (page - 1) * limit
     # from_queryset 针对queryset 对象序列化
-    data = await models.Project_Pydantic.from_queryset(models.Project.filter(deleted=0).all().order_by('-created_at').offset(skip).limit(limit))
+    data = await models.Project_Pydantic.from_queryset(models.Project.filter(deleted=0, status=1).all().order_by('-created_at').offset(skip).limit(limit))
     return core.Success(data={"total": await models.Project.all().count(), "items": data})
 
 
 @project_router.post("/project/detail", name="获取项目详细")
-async def select(project: models.ProjectInBase):
+async def select(project: models.ProjectIn_Pydantic):
     """
     - 获取指定项目名称详情接口\n
     - name: 项目名称【必填】
@@ -140,5 +140,5 @@ async def get_projects():
     - 获取全部分页内容，不支持分页
     """
     # 按照不分页结构显示
-    data = await models.Project_Pydantic.from_queryset(models.Project.filter(deleted=0).all())
+    data = await models.Project_Pydantic.from_queryset(models.Project.filter(deleted=0, status=1).all())
     return core.Success(data={"total": len(data), "items": data})

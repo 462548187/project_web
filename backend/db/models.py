@@ -53,7 +53,7 @@ class Project(AbstractModel):
     desc = fields.TextField(description="项目描述", null=True)
     front_serve = fields.TextField(description="前端服务", null=True)
     back_serve = fields.TextField(description="后端服务", null=True)
-    status = fields.IntField(max_length=1, description="需求状态", default='1')
+    status = fields.IntField(max_length=1, description="项目状态", default='1')
     deleted = fields.IntField(description="是否已删除", default='0')
 
     # 查询集最大递归层级
@@ -140,10 +140,6 @@ TaskIn_Pydantic = pydantic_model_creator(Task, name="TaskIn", exclude_readonly=T
 # 推送相关
 Push_Pydantic = pydantic_model_creator(Push, name="Push")
 PushIn_Pydantic = pydantic_model_creator(Push, name="PushIn", exclude_readonly=True)
-
-
-class ProjectInBase(ProjectIn_Pydantic):
-    name: str
 
 
 class TaskInStoryName(TaskIn_Pydantic):
