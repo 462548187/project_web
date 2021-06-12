@@ -11,7 +11,6 @@
 @ModifyTime     :
 """
 from typing import List
-from enum import Enum
 
 from tortoise import fields, Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
@@ -141,6 +140,10 @@ TaskIn_Pydantic = pydantic_model_creator(Task, name="TaskIn", exclude_readonly=T
 # 推送相关
 Push_Pydantic = pydantic_model_creator(Push, name="Push")
 PushIn_Pydantic = pydantic_model_creator(Push, name="PushIn", exclude_readonly=True)
+
+
+class ProjectInBase(ProjectIn_Pydantic):
+    name: str
 
 
 class TaskInStoryName(TaskIn_Pydantic):
