@@ -54,4 +54,4 @@ class PriorityType(str, Enum):
 class ReceiveType(str, Enum):
     Dingding = '钉钉'
     Email = '邮件'
-    Weixin = '微信'
+    Wechat = '微信'
