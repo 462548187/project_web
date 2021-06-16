@@ -64,3 +64,7 @@ class MysqlSettings(BaseModel):
     user: str
     password: str
     database: str
+
+
+class NameBase(BaseModel):
+    name: str

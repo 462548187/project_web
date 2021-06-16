@@ -11,7 +11,6 @@
 @ModifyTime     :
 """
 from typing import List
-from enum import Enum
 
 from tortoise import fields, Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
@@ -37,12 +36,16 @@ class User(AbstractModel):
 
 
 class Staff(AbstractModel):
-    name = fields.CharField(max_length=25,  description="员工姓名")
+    name = fields.CharField(max_length=25, description="员工姓名")
     email = fields.CharField(max_length=50, description="邮箱", null=True)
     mobile = fields.CharField(max_length=11, description="手机", null=True)
     department = fields.CharField(max_length=20, description="部门", null=True)
     status = fields.IntField(description="是否在职", default='1')
     deleted = fields.IntField(description="是否已删除", default='0')
+
+    # 查询集最大递归层级
+    class PydanticMeta:
+        max_recursion = 1
 
 
 class Project(AbstractModel):
@@ -50,7 +53,7 @@ class Project(AbstractModel):
     desc = fields.TextField(description="项目描述", null=True)
     front_serve = fields.TextField(description="前端服务", null=True)
     back_serve = fields.TextField(description="后端服务", null=True)
-    status = fields.IntField(max_length=1, description="需求状态", default='1')
+    status = fields.IntField(max_length=1, description="项目状态", default='1')
     deleted = fields.IntField(description="是否已删除", default='0')
 
     # 查询集最大递归层级
